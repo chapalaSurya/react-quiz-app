@@ -10,29 +10,6 @@ function Quiz() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-
-    const timer = setInterval(() => {
-      setTime((prev) => prev - 1);
-    }, 1000);
-
-    if (time === 0) {
-      nextQuestion();
-    }
-
-    return () => clearInterval(timer);
-
-  }, [time]);
-
-  const handleAnswer = (option) => {
-
-    if (option === questions[current].answer) {
-      setScore(score + 1);
-    }
-
-    nextQuestion();
-  };
-
   const nextQuestion = () => {
 
     const next = current + 1;
@@ -43,6 +20,23 @@ function Quiz() {
     } else {
       navigate("/result", { state: { score } });
     }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      nextQuestion();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [current]);   // dependency changed to current
+
+  const handleAnswer = (option) => {
+
+    if (option === questions[current].answer) {
+      setScore(score + 1);
+    }
+
+    nextQuestion();
   };
 
   return (
