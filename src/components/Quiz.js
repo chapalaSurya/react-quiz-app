@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
 
@@ -10,7 +10,7 @@ function Quiz() {
 
   const navigate = useNavigate();
 
-  const nextQuestion = () => {
+  const nextQuestion = useCallback(() => {
 
     const next = current + 1;
 
@@ -20,15 +20,18 @@ function Quiz() {
     } else {
       navigate("/result", { state: { score } });
     }
-  };
+
+  }, [current, score, navigate]);
 
   useEffect(() => {
+
     const timer = setTimeout(() => {
       nextQuestion();
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [current]);   // dependency changed to current
+
+  }, [nextQuestion]);
 
   const handleAnswer = (option) => {
 
